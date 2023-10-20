@@ -4,11 +4,11 @@
 <div class="container-fluid p-0">
 
     <h1 class="h3 mb-3">Campaigns</h1>
-
+    <a href="{{ route('backend-campaign-create') }}" class="btn btn-primary">Add New</a>
     <div class="row">
         <div class="col-12">
             <div class="card">
-                
+
                 <div class="card-body">
 
                     <table class="table table-striped">

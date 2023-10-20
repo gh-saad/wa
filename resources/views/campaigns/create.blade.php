@@ -60,21 +60,22 @@
 </style>
 <div class="container-fluid p-0">
 
-    <h1 class="h3 mb-3">Templates</h1>
+    <h1 class="h3 mb-3">Add New Campaign</h1>
 
     <div class="row">
         <div class="col-md-8">
             <div class="card">
 
                 <div class="card-body">
-                    <form>
+                    <form action="{{ route('backend-campaign-store') }}" method="post">
+                        @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Name:</label>
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
                             <label for="template" class="form-label">Template:</label>
-                            <select class="form-select" id="template" name="template" required>
+                            <select class="form-select" id="template" name="template_id" required>
                                 <option>Select a Template</option>
                                 @foreach($templates as $template)
                                     <option value="{{ $template['id'] }}">{{ $template['name'] }}</option>
@@ -83,16 +84,16 @@
                         </div>
                         <div class="mb-3">
                             <label for="list" class="form-label">List:</label>
-                            <select class="form-select" id="list" name="list" required>
-                                <option value="">Select a List</option>
-                                <option value="list1">List 1</option>
-                                <option value="list2">List 2</option>
-                                <option value="list3">List 3</option>
+                            <select class="form-select" id="list" name="list_id" required>
+                                <option>Select a List</option>
+                                @foreach ($lists as $list)
+                                <option value="{{ $list['id'] }}">{{ $list['name'] }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="schedule" class="form-label">Schedule:</label>
-                            <input type="datetime-local" class="form-control" id="schedule" name="schedule" required>
+                            <input type="datetime-local" class="form-control" id="schedule" name="schedule_time" required>
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>

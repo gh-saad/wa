@@ -3,7 +3,7 @@
 @section('content')
 <div class="container-fluid p-0">
 
-    <h1 class="h3 mb-3">Contacts Imports</h1>
+    <h1 class="h3 mb-3">List Import</h1>
 
     <div class="row">
         <div class="col-12">
@@ -12,7 +12,7 @@
                     <h5 class="card-title mb-0">Empty card</h5>
                 </div> -->
                 <div class="card-body">
-                    <form action="{{route('backend-contact-upload')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('backend-list-store')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="csvFile" class="form-label">Choose CSV File</label>

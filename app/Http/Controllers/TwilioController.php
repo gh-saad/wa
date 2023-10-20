@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Twilio\Rest\Client;
+use App\Models\Messages;
 
 class TwilioController extends Controller
 {
@@ -49,5 +50,18 @@ class TwilioController extends Controller
         );
 
         return $message->sid;
+    }
+
+    public function incoming(Request $request)
+    {
+        $data = $request->all();
+
+        $input_data = [
+            'conversation_id' => 1,
+            'user_id' => '1',
+            'content' => $data['From'].': '.$data['Body'] .' :'.$data['To']
+        ];
+        Messages::create($input_data);
+        return 1;
     }
 }

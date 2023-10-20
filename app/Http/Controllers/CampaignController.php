@@ -6,6 +6,7 @@ use App\Http\Controllers\TwilioController;
 use App\Models\Campaign;
 use App\Models\Template;
 use App\Models\Contact;
+use App\Models\Lists;
 use Illuminate\Http\Request;
 
 class CampaignController extends Controller
@@ -25,7 +26,11 @@ class CampaignController extends Controller
     public function create()
     {
         $templates = Template::all();
-        return view("campaigns.create",['templates'=>$templates]);
+        $lists = Lists::all();
+        return view("campaigns.create",[
+            'templates' => $templates,
+            "lists" => $lists
+        ]);
     }
 
     /**
@@ -33,7 +38,17 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => 'required|max:65',
+            'template_id' => 'required',
+            'list_id' => 'required',
+            'schedule_time'=> 'required'
+        ]);
+
+        Campaign::create($data);
+
+        return redirect()->route('backend-campaign-create')->with('success', 'User created successfully!');
+
     }
 
     /**
@@ -41,7 +56,8 @@ class CampaignController extends Controller
      */
     public function show(Campaign $campaign)
     {
-        //
+
+
     }
 
     /**

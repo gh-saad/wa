@@ -1,14 +1,27 @@
 <nav id="sidebar" class="sidebar js-sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="index.html">
-            <span class="align-middle">Xera Marketing WA</span>
+            <span class="align-middle">WA Xera</span>
         </a>
 
         <ul class="sidebar-nav">
 
-            <li class="sidebar-item active">
+            <li class="sidebar-item">
                 <a class="sidebar-link" href="index.html">
                     <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                </a>
+            </li>
+
+            <li class="sidebar-item {{ url()->current() == route('backend-lists') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('backend-lists') }}">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Lists</span>
+                </a>
+            </li>
+
+
+            <li class="sidebar-item {{ url()->current() == route('backend-contacts') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('backend-contacts') }}">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Contacts</span>
                 </a>
             </li>
             <li class="sidebar-item">
@@ -17,23 +30,8 @@
                 </a>
             </li>
             <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ route('backend-contacts') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Contacts</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ route('backend-contact-import') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Import</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('backend-templates') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Messages Templates</span>
-                </a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ route('backend-templates-new') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Add New Template</span>
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Templates</span>
                 </a>
             </li>
             <li class="sidebar-item">
@@ -41,20 +39,12 @@
                     <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Send Messages</span>
                 </a>
             </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ route('backend-campaign-new') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Add New Dampaign</span>
+            <li class="sidebar-item {{ url()->current() == route('backend-campaigns') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('backend-campaigns') }}">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Campaigns</span>
                 </a>
             </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="{{ route('backend-campaign-run') }}">
-                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Add New Run</span>
-                </a>
-            </li>
-            
-        
-            
-            
+
         </ul>
 
     </div>

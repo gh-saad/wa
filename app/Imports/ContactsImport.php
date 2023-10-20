@@ -16,7 +16,8 @@ class ContactsImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         return new Contact([
-            'name'     => $row['name'],
+            'list_id'   => 1,
+            'name'      => $row['name'],
             'number'    => $row['number'], 
         ]);
     }

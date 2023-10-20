@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                
+
                 <div class="card-body">
 
                     <table class="table table-striped">
@@ -16,7 +16,7 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Number</th>
-                                <th>Report</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -25,7 +25,7 @@
                         <tr>
                             <td>{{ $contact->name }}</td>
                             <td>{{ $contact->number }}</td>
-                            <td></td>
+                            <td>{{ $contact->status }}</td>
                             <td>
                                 <a href="#">Edit</a>
                                 <a href="#">Delete</a>
