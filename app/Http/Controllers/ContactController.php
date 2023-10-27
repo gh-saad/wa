@@ -10,18 +10,7 @@ use App\Models\Contact;
 class ContactController extends Controller
 {
     public function contacts() {
-        $data = Contact::all();
+        $data = Contact::where('status', '!=', '2')->get();
         return view("contacts.contacts", ['data' => $data]);
-    }
-
-    public function import(){
-        return view("contacts.import");
-    }
-    
-    public function upload() 
-    {
-        Excel::import(new ContactsImport, request()->file('contact-file'));
-               
-        return back();
     }
 }

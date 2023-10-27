@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Twilio\Rest\Client;
-use App\Models\Messages;
-
+use App\Models\Message;
+use App\Models\Conversation;
+use App\Models\Contact;
+use App\Models\Number;
 class TwilioController extends Controller
 {
     /*
@@ -35,7 +37,7 @@ class TwilioController extends Controller
         }
     }
   */
-    public function sendMessage($to, $body)
+    public function sendMessage($from, $to, $body)
     {
         $sid = env('TWILIO_SID');
         $token = env('TWILIO_AUTH_TOKEN');
@@ -44,7 +46,7 @@ class TwilioController extends Controller
         $message = $twilio->messages->create(
             "whatsapp:+$to", // to
             [
-                "from" => "whatsapp:+14155238886",
+                "from" => "whatsapp:+$from",
                 "body" => $body
             ]
         );
@@ -55,13 +57,29 @@ class TwilioController extends Controller
     public function incoming(Request $request)
     {
         $data = $request->all();
+        $from = str_replace("+","",$data['From']);
+        $to = str_replace("+","",$data['To']);
+        $contact = Contact::where('number', $from)->first();
+        $number = Number::where('number', $to)->first();
+        if($contact == null){
+            $contact = Contact::create([
+                "list_id" => 0,
+                "name" => "Unknown",
+                "number" => $from,
+                "status" => 0
+            ]);
+        }
+        $conversation = Conversation::firstOrCreate(['num_id'=> $number->id, 'contact_id' => $contact->id]);
 
         $input_data = [
-            'conversation_id' => 1,
-            'user_id' => '1',
-            'content' => $data['From'].': '.$data['Body'] .' :'.$data['To']
+            'conversation_id' => $conversation->id,
+            'from' => $from,
+            'to' => $to,
+            'content' => $data['Body']
         ];
-        Messages::create($input_data);
+        Conversation::where('id', $conversation->id)
+        ->update(['status' => 1]);
+        Message::create($input_data);
         return 1;
     }
 }

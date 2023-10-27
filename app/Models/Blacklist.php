@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lists extends Model
+class Blacklist extends Model
 {
     use HasFactory;
+    protected $table = 'blacklist';
     protected $guarded = ['id'];
 }

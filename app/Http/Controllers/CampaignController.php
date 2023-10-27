@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\App;
 use App\Http\Controllers\TwilioController;
 use App\Models\Campaign;
 use App\Models\Template;
 use App\Models\Contact;
 use App\Models\Lists;
+use App\Models\ListContact;
+use App\Models\Blacklist;
+use App\Models\Number;
+use App\Models\Conversation;
+use App\Models\Message;
 use Illuminate\Http\Request;
 
 class CampaignController extends Controller
@@ -16,7 +22,10 @@ class CampaignController extends Controller
      */
     public function index()
     {
-        $data = Campaign::all();
+        $data = Campaign::select('campaigns.*','templates.name as t_name', 'lists.name as l_name')
+        ->join('templates', 'campaigns.template_id', '=', 'templates.id')
+        ->join("lists","campaigns.list_id", "=", "lists.id")
+        ->get();
         return view("campaigns.campaigns",["data" => $data]);
     }
 
@@ -26,10 +35,12 @@ class CampaignController extends Controller
     public function create()
     {
         $templates = Template::all();
-        $lists = Lists::all();
+        $numbers = Number::all();
+        $lists = Lists::where('total_contacts', '>', 0)->get();
         return view("campaigns.create",[
             'templates' => $templates,
-            "lists" => $lists
+            'lists' => $lists,
+            'numbers' => $numbers
         ]);
     }
 
@@ -38,16 +49,24 @@ class CampaignController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|max:65',
-            'template_id' => 'required',
-            'list_id' => 'required',
-            'schedule_time'=> 'required'
-        ]);
-
+        // $data = $request->validate([
+        //     'name' => 'required|max:15',
+        //     'num_id' => 'required',
+        //     'template_id' => 'required',
+        //     'list_id' => 'required',
+        //     'schedule_time'=> 'required'
+        // ]);
+        $data = [
+            'name' => $request->get('name'),
+            'num_id' => $request->get('num_id'),
+            'template_id' => $request->get('template_id'),
+            'list_id' => $request->get('list_id'),
+            'schedule_time'=> $request->get('schedule_time')
+        ];
+        // dd($data);
         Campaign::create($data);
 
-        return redirect()->route('backend-campaign-create')->with('success', 'User created successfully!');
+        return redirect()->route('backend-campaigns')->with('success', 'User created successfully!');
 
     }
 
@@ -84,14 +103,57 @@ class CampaignController extends Controller
         //
     }
 
-    public function run(){
+    public function run(Campaign $campaign){
         $twilio = new TwilioController();
-        $id = 1;
-        $contants = Contact::all();
-        $template = Template::where('id', $id)->first();
-        foreach($contants as $contant){
-            echo $twilio->sendMessage($contant['number'], $template['body']);
+
+        $listContacts = ListContact::select('list_contact.*', 'contacts.name', 'contacts.number')->join('contacts', 'list_contact.contact_id', '=','contacts.id')
+        ->where('list_id', $campaign->list_id)->get();
+
+        $blacklist = Blacklist::select('number')->get();
+        $blacklist = $blacklist->toArray();
+        $blacklistNumbers = array_column($blacklist, 'number');
+
+        $template = Template::find($campaign->template_id);
+        $number = Number::find($campaign->num_id);
+        $number_id = $number->id;
+
+        foreach($listContacts as $contant){
+            if (in_array($contant['number'], $blacklistNumbers)) {
+                continue;
+            }
+            // print_r($conversation_data);
+            $conversation = Conversation::where('contact_id', $contant->contact_id)
+            ->where('num_id',$number_id)->first();
+            if ($conversation == null){
+                $conversation = Conversation::create([
+                    'contact_id' => $contant->contact_id,
+                    'num_id' => $number_id,
+                    "status" => 0,
+                ]);
+            }
+            $conversation_id = $conversation->id;
+
+            // echo '<br>';
+            // echo 'Numbmer From: +'.$contant['number'].'<br>';
+            // echo 'Numbmer to: +'.$number['number'].'<br>';
+            // echo 'Template: '.$template['body'].'<br>';
+            // echo 'Conversation id: '.$conversation_id.'<br>';
+            $body = str_replace('{{1}}',$contant['name'], $template['body']);
+            $message_data = [
+                "conversation_id" => $conversation_id,
+                "from" => $number['number'],
+                "to" => $contant['number'],
+                "content" => $body,
+            ];
+            print_r($message_data);
+            if(Message::create($message_data)){
+                if (App::environment('production')) {
+                    $twilio->sendMessage($number['number'], $contant['number'], $body);
+                }
+            }
         }
-        //return redirect(route('backend-campaigns'));
+        $campaign->status = 1;
+        $campaign->save();
+        return redirect(route('backend-campaigns'));
     }
 }

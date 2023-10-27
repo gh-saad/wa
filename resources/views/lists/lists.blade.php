@@ -3,8 +3,9 @@
 @section('content')
     <div class="container-fluid p-0">
 
+        <a href="{{ route('backend-list-create') }}" class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> Import</a>
         <h1 class="h3 mb-3">Lists</h1>
-        <a href="{{ route('backend-list-create') }}" class="btn btn-primary">Import</a>
+        
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -14,16 +15,22 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>#</th>
                                         <th>Name</th>
-                                        <th>Upload</th>
+                                        <th>Records</th>
+                                        <th></th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
 
                                     @foreach ($data as $list)
                                         <tr>
+                                            <td>LST#{{ $list->id }}</td>
                                             <td>{{ $list->name }}</td>
-                                            <td></td>
+                                            <td>{{ $list->total_contacts ?? 0 }}</td>
+                                            <td>{{ $list->created_at->diffForHumans() }}</td>
+                                            <td><a href="#">Delete</a></td>
                                         </tr>
                                     @endforeach
 

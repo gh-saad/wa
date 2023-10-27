@@ -3,8 +3,8 @@
 @section('content')
 <div class="container-fluid p-0">
 
-    <a href="{{ route('backend-list-create') }}" class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> Import</a>
-    <h1 class="h3 mb-3">Contacts</h1>
+    <a href="{{ route('backend-blacklist-create') }}" class="btn btn-primary float-end mt-n1"><i class="fas fa-plus"></i> Import</a>
+    <h1 class="h3 mb-3">Blacklist</h1>
 
     <div class="row">
         <div class="col-12">
@@ -15,22 +15,17 @@
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>ID</th>
                                 <th>Number</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th>Last Modified</th>
                             </tr>
                         </thead>
                         <tbody>
-                        @foreach($data as $contact)
+                        @foreach($data as $blacklist)
                         <tr>
-                            <td>{{ $contact->name }}</td>
-                            <td>{{ $contact->number }}</td>
-                            <td>{{ $contact->status }}</td>
-                            <td>
-                                <a href="#">Edit</a>
-                                <a href="#">Delete</a>
-                            </td>
+                            <td>BKL#{{ $blacklist->id }}</td>
+                            <td>{{ $blacklist->number }}</td>
+                            <td>{{ $blacklist->updated_at->diffForHumans() }}</td>
                         </tr>
                         @endforeach
                         </tbody>

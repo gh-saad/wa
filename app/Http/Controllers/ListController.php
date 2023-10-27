@@ -6,6 +6,7 @@ use App\Imports\ContactsImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Contact;
 use App\Models\Lists;
+use App\Models\ListContact;
 use Illuminate\Http\Request;
 
 class ListController extends Controller
@@ -31,8 +32,15 @@ class ListController extends Controller
      */
     public function store()
     {
-        Excel::import(new ContactsImport, request()->file('contact-file'));
-        return back();
+        $uploadedFile = request()->file('contact-file');
+        $fileName = $uploadedFile->getClientOriginalName();
+        $list = Lists::create(['name' => $fileName]);
+        Excel::import(new ContactsImport($list->id), $uploadedFile);
+        // Update the total_contacts field in the Lists table
+        $list->total_contacts = ListContact::where('list_id', $list->id)->count();
+        $list->save();
+
+        return redirect()->route('backend-lists')->with('success', "{$list->total_contacts} Records Imported Successfully!");
     }
 
     /**

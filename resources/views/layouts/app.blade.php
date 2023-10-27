@@ -3,6 +3,8 @@
 
 <head>
     @include('includes.head')
+
+    @stack('css')
 </head>
 
 <body>

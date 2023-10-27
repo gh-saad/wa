@@ -74,6 +74,15 @@
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
+                            <label for="template" class="form-label">Number:</label>
+                            <select class="form-select" id="number" name="num_id" required>
+                                <option>Select a Template</option>
+                                @foreach($numbers as $number)
+                                    <option value="{{ $number['id'] }}">{{ $number['name'] }} {{ $number['number'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="template" class="form-label">Template:</label>
                             <select class="form-select" id="template" name="template_id" required>
                                 <option>Select a Template</option>
@@ -87,7 +96,7 @@
                             <select class="form-select" id="list" name="list_id" required>
                                 <option>Select a List</option>
                                 @foreach ($lists as $list)
-                                <option value="{{ $list['id'] }}">{{ $list['name'] }}</option>
+                                <option value="{{ $list['id'] }}">LST#{{ $list['id'] }} - {{ $list['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
