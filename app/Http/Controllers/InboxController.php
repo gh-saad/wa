@@ -40,21 +40,21 @@ class InboxController extends Controller
 
     public function show(Conversation $conversation)
     {
-        if($conversation->status == 1){
-            $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
-            ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
-            $contact = Contact::find($conversation->contact_id);
-
-            $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
-            return view("inbox.show",[
-                "conversations" => $conversations,
-                "conversation" => $conversation,
-                "contact" => $contact,
-                "messages" => $messages
-            ]);
-        }else{
+        if($conversation->status == 2){
             return redirect()->route('backend-inbox');
         }
+        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
+        ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
+        $contact = Contact::find($conversation->contact_id);
+
+        $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
+        return view("inbox.show",[
+            "conversations" => $conversations,
+            "conversation" => $conversation,
+            "contact" => $contact,
+            "messages" => $messages
+        ]);
+
     }
 
     public function create(Request $request, Conversation $conversation) {
