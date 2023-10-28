@@ -104,7 +104,7 @@ class InboxController extends Controller
         $message = Message::create($message_data);
         if($message){
             if (App::environment('production')) {
-                $sid = $twilio->sendMessage($number['number'], $contact['number'], $body);
+                $sid = $twilio->sendMessage($number['number'], $contact['number'], $request->get('body'));
                 if($sid){
                     $message->message_sid = $sid;
                     $message->save();
