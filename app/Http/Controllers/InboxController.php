@@ -14,7 +14,7 @@ class InboxController extends Controller
 {
     public function index()
     {
-        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number')
+        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
         ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
 
         return view("inbox.inbox",[
@@ -24,7 +24,7 @@ class InboxController extends Controller
 
     public function show(Conversation $conversation)
     {
-        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number')
+        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
         ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
         $contact = Contact::find($conversation->contact_id);
 

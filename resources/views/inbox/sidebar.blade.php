@@ -11,7 +11,7 @@
                                     alt="user img">
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <h3>{{ $conversation->name }} - {{ $contact->wa_name }}</h3>
+                                <h3>{{ $conversation->name }} - {{ $conversation->wa_name }}</h3>
                                 <p>{{ $conversation->number }}</p>
                             </div>
                         </a>
