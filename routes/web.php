@@ -45,6 +45,7 @@ Route::get('campaign/{campaign}/run', [CampaignController::class, 'run'])->name(
 Route::get('inbox', [InboxController::class, 'index'])->name("backend-inbox");
 Route::get('inbox/send', [InboxController::class, 'send_list'])->name("backend-inbox-send");
 Route::get('inbox/{conversation}/show', [InboxController::class, 'show'])->name("backend-inbox-show");
+Route::get('inbox/send/{conversation}/show', [InboxController::class, 'send_show'])->name("backend-inbox-send-show");
 Route::post('inbox/{conversation}/create', [InboxController::class, 'create'])->name("backend-inbox-create");
 // Route::post('campaign/store', [CampaignController::class, 'store'])->name("backend-campaign-store");
 // Route::get('campaign/run', [CampaignController::class, 'run'])->name("backend-campaign-run");

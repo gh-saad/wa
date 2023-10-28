@@ -40,21 +40,46 @@ class InboxController extends Controller
 
     public function show(Conversation $conversation)
     {
-        if($conversation->status == 2){
+        if($conversation->status == 1){
+            $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
+            ->join("contacts","conversations.contact_id", "=", "contacts.id")
+            ->where('conversations.status', 1)
+            ->orderBy('updated_at')
+            ->get();
+            $contact = Contact::find($conversation->contact_id);
+
+            $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
+            return view("inbox.show",[
+                "conversations" => $conversations,
+                "conversation" => $conversation,
+                "contact" => $contact,
+                "messages" => $messages
+            ]);
+        }else{
             return redirect()->route('backend-inbox');
         }
-        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
-        ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
-        $contact = Contact::find($conversation->contact_id);
+    }
 
-        $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
-        return view("inbox.show",[
-            "conversations" => $conversations,
-            "conversation" => $conversation,
-            "contact" => $contact,
-            "messages" => $messages
-        ]);
+    public function send_show(Conversation $conversation)
+    {
+        if($conversation->status == 0){
+            $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
+            ->join("contacts","conversations.contact_id", "=", "contacts.id")
+            ->where('conversations.status', 0)
+            ->orderBy('updated_at')
+            ->get();
+            $contact = Contact::find($conversation->contact_id);
 
+            $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
+            return view("inbox.show",[
+                "conversations" => $conversations,
+                "conversation" => $conversation,
+                "contact" => $contact,
+                "messages" => $messages
+            ]);
+        }else{
+            return redirect()->route('backend-inbox');
+        }
     }
 
     public function create(Request $request, Conversation $conversation) {
