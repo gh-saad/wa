@@ -8,6 +8,7 @@ use App\Models\Message;
 use App\Models\Conversation;
 use App\Models\Contact;
 use App\Models\Number;
+use App\Models\Blacklist;
 class TwilioController extends Controller
 {
     /*
@@ -62,6 +63,7 @@ class TwilioController extends Controller
         $wa_latitude = $request->get('Latitude');
         $wa_longitude = $request->get('Longitude');
         $message_sid = $request->get('SmsMessageSid');
+        $body = $request->get('Body');
 
         $contact = Contact::where('number', $from)->first();
         $number = Number::where('number', $to)->first();
@@ -88,19 +90,33 @@ class TwilioController extends Controller
             'message_sid'=>$message_sid,
             'from' => $from,
             'to' => $to,
-            'content' => $request->get('Body'),
+            'content' => $body,
             'latitude' => $wa_latitude,
             'longitude' => $wa_longitude,
         ];
 
-        Conversation::where('id', $conversation->id)
-        ->update(['status' => 1]);
+        // Check Blacklist word and make conversation
+        $body = strtolower($body);
+        $blacklist_word = ['no'];
+
+        $conversation->status = 1;
+        foreach ($blacklist_word as $word) {
+            if ($body === $word) {
+                $contact->status = 2;
+                $conversation->status = 2;
+                Blacklist::create(['number' => $from]);
+                break;
+            }
+        }
+        $conversation->save();
 
         Message::create($input_data);
 
         // Update wa profile name in contact
         if($contact->wa_name == null){
             $contact->wa_name = $wa_name;
+            $contact->save();
+        }else{
             $contact->save();
         }
 

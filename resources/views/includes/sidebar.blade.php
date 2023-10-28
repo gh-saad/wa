@@ -36,6 +36,11 @@
                     <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Inbox</span>
                 </a>
             </li>
+            <li class="sidebar-item {{ url()->current() == route('backend-inbox-send') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('backend-inbox-send') }}">
+                    <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Send list</span>
+                </a>
+            </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{{ route('backend-templates') }}">
                     <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Templates</span>

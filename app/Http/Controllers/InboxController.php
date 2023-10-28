@@ -15,7 +15,23 @@ class InboxController extends Controller
     public function index()
     {
         $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
-        ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
+        ->join("contacts","conversations.contact_id", "=", "contacts.id")
+        ->where('conversations.status', 1)
+        ->orderBy('updated_at')
+        ->get();
+
+        return view("inbox.inbox",[
+            "conversations" => $conversations
+        ]);
+    }
+
+    public function send_list()
+    {
+        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
+        ->join("contacts","conversations.contact_id", "=", "contacts.id")
+        ->where('conversations.status', 0)
+        ->orderBy('updated_at')
+        ->get();
 
         return view("inbox.inbox",[
             "conversations" => $conversations
@@ -24,17 +40,21 @@ class InboxController extends Controller
 
     public function show(Conversation $conversation)
     {
-        $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
-        ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
-        $contact = Contact::find($conversation->contact_id);
+        if($conversation->status == 1){
+            $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
+            ->join("contacts","conversations.contact_id", "=", "contacts.id")->get();
+            $contact = Contact::find($conversation->contact_id);
 
-        $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
-        return view("inbox.show",[
-            "conversations" => $conversations,
-            "conversation" => $conversation,
-            "contact" => $contact,
-            "messages" => $messages
-        ]);
+            $messages = Message::where('conversation_id', $conversation->id)->orderBy('created_at')->get();
+            return view("inbox.show",[
+                "conversations" => $conversations,
+                "conversation" => $conversation,
+                "contact" => $contact,
+                "messages" => $messages
+            ]);
+        }else{
+            return redirect()->route('backend-inbox');
+        }
     }
 
     public function create(Request $request, Conversation $conversation) {
@@ -42,11 +62,11 @@ class InboxController extends Controller
         $contact = Contact::find($conversation->contact_id);
         $number = Number::find($conversation->num_id);
 
-        $blacklist = Blacklist::where('number',$contact['number'])->get();
+        $blacklist = Blacklist::where('number',$contact['number'])->first();
         if($blacklist){
             $conversation->status = 2;
             $conversation->save();
-            return redirect()->route('backend-inbox-show',$conversation->id)->with('This Conversation in blocked');
+            return redirect()->route('backend-inbox')->with('This Conversation in blocked');
         }
         $message_data = [
             "conversation_id" => $conversation->id,

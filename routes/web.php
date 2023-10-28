@@ -43,6 +43,7 @@ Route::post('campaign/store', [CampaignController::class, 'store'])->name("backe
 Route::get('campaign/{campaign}/run', [CampaignController::class, 'run'])->name("backend-campaign-run");
 
 Route::get('inbox', [InboxController::class, 'index'])->name("backend-inbox");
+Route::get('inbox/send', [InboxController::class, 'send_list'])->name("backend-inbox-send");
 Route::get('inbox/{conversation}/show', [InboxController::class, 'show'])->name("backend-inbox-show");
 Route::post('inbox/{conversation}/create', [InboxController::class, 'create'])->name("backend-inbox-create");
 // Route::post('campaign/store', [CampaignController::class, 'store'])->name("backend-campaign-store");

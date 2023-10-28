@@ -12,120 +12,54 @@
     </script>
 
     <link rel="stylesheet" href="{{ url('assets/css/style.css') }}">
+    <style>
+        .content {
+            padding: 1rem 1rem 1.5rem !important;
+        }
+    </style>
 @endpush
 
 @section('content')
-    <div class="container-fluid p-0">
-
-        <!-- char-area -->
-        <section class="message-area">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="chat-area">
-                            <!-- chatlist -->
-                            <div class="chatlist">
-                                <div class="modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="chat-header">
-                                            <div class="msg-search">
-                                                <input type="text" class="form-control" id="inlineFormInputGroup"
-                                                    placeholder="Search" aria-label="search">
-                                                <a class="add" href="#"><img class="img-fluid"
-                                                        src="https://mehedihtml.com/chatbox/assets/img/add.svg"
-                                                        alt="add"></a>
-                                            </div>
-
-                                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link active" id="Open-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#Open" type="button" role="tab"
-                                                        aria-controls="Open" aria-selected="true">Lead</button>
-                                                </li>
-                                                <li class="nav-item" role="presentation">
-                                                    <button class="nav-link" id="Closed-tab" data-bs-toggle="tab"
-                                                        data-bs-target="#Closed" type="button" role="tab"
-                                                        aria-controls="Closed" aria-selected="false">Send</button>
-                                                </li>
-                                            </ul>
+    <!-- char-area -->
+    <section class="message-area">
+        <div class="row">
+            <div class="col-12">
+                <div class="chat-area">
+                    <!-- chatlist -->
+                    <div class="chatlist shadow">
+                        <div class="modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="chat-header">
+                                    <div class="msg-search">
+                                        <input type="text" class="form-control" id="inlineFormInputGroup"
+                                            placeholder="Search" aria-label="search">
                                         </div>
 
-                                        <div class="modal-body">
-                                            <!-- chat-list -->
-                                            @include('inbox.sidebar')
-                                            <!-- chat-list -->
-                                        </div>
-                                    </div>
+                                    <hr>
                                 </div>
-                            </div>
-                            <!-- chatlist -->
 
-
-
-                            <!-- chatbox -->
-                            <div class="chatbox">
-                                <div class="modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="msg-head">
-                                            <div class="row">
-                                                <div class="col-8">
-                                                    <div class="d-flex align-items-center">
-
-
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <ul class="moreoption">
-                                                        <li class="navbar nav-item dropdown">
-                                                            <a class="nav-link dropdown-toggle" href="#"
-                                                                role="button" data-bs-toggle="dropdown"
-                                                                aria-expanded="false"><i class="fa fa-ellipsis-v"
-                                                                    aria-hidden="true"></i></a>
-                                                            <ul class="dropdown-menu">
-                                                                <li><a class="dropdown-item" href="#">Action</a>
-                                                                </li>
-                                                                <li><a class="dropdown-item" href="#">Another
-                                                                        action</a>
-                                                                </li>
-                                                                <li>
-                                                                    <hr class="dropdown-divider">
-                                                                </li>
-                                                                <li><a class="dropdown-item" href="#">Something else
-                                                                        here</a></li>
-                                                            </ul>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="modal-body">
-                                            <div class="msg-body">
-                                                <ul>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="send-box">
-
-
-
-
-                                        </div>
-                                    </div>
+                                <div class="modal-body">
+                                    <!-- chat-list -->
+                                    @include('inbox.sidebar')
+                                    <!-- chat-list -->
                                 </div>
                             </div>
                         </div>
-                        <!-- chatbox -->
+                    </div>
+                    <!-- chatlist -->
 
+                    <!-- chatbox -->
+                    <div class="chatbox">
+                        <div class="modal-dialog-scrollable bg-light">
 
+                        </div>
                     </div>
                 </div>
+                <!-- chatbox -->
+
+
             </div>
-    </div>
+        </div>
     </section>
     <!-- char-area -->
 
