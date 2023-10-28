@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\TwilioController;
 use Illuminate\Support\Facades\App;
 use App\Models\Conversation;
 use App\Models\Message;
@@ -83,7 +84,8 @@ class InboxController extends Controller
     }
 
     public function create(Request $request, Conversation $conversation) {
-
+        $twilio = new TwilioController();
+        
         $contact = Contact::find($conversation->contact_id);
         $number = Number::find($conversation->num_id);
 
