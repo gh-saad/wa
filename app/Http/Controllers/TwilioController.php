@@ -131,12 +131,17 @@ class TwilioController extends Controller
         $to = str_replace("whatsapp:+","",$request->get('To'));
         $message_sid = $request->get('MessageSid');
         $status =   $request->get('SmsStatus');
-        if($status == 'sent'){
+        // queued , sent, delivered, read, failed
+        if($status == 'queued'){
+            $status = 0;
+        }else if($status == 'sent'){
             $status = 1;
-        }else if($status == 'received'){
-            $status = 1;
+        }else if($status == 'delivered'){
+            $status = 2;
         }else if($status == 'read'){
-            $status = 1;
+            $status = 3;
+        }else{
+            $status = 4;
         }
 
         $data = [

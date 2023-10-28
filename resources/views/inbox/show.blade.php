@@ -112,17 +112,23 @@
                                                         <div class="d-flex">
                                                             <span class="time p-1">{{$message->created_at->diffForHumans()}}</span>
                                                             @php
+                                                                // queued , sent, delivered, read, failed
                                                                 $status = '';
                                                                 switch ($message->status) {
                                                                     case 0:
-                                                                        $status = "Que";
+                                                                        $status = "Queued";
                                                                         break;
                                                                     case 1:
-                                                                        $status = "Send";
+                                                                        $status = "Sent";
                                                                         break;
                                                                     case 2:
+                                                                        $status = "Delivered";
+                                                                        break;
+                                                                    case 3:
                                                                         $status = "Read";
                                                                         break;
+                                                                    default:
+                                                                        $status = "Failed";
                                                                 }
                                                             @endphp
                                                             <span class="status p-1">{{ $status }}</span>
