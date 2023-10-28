@@ -79,7 +79,7 @@
                                                                 alt="user img">
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
-                                                            <h3>{{ $contact->name }}</h3>
+                                                            <h3>{{ $contact->name }} - {{ $contact->wa_name }}</h3>
                                                             <p>{{ $contact->number }}</p>
                                                         </div>
                                                     </div>
@@ -117,7 +117,24 @@
 
                                                     <li class="{{ ($message->from == $contact->number) ? 'sender': 'repaly' }}">
                                                         <p>  {{ $message['content'] }} </p>
-                                                        <span class="time">{{$message->created_at->diffForHumans()}}</span>
+                                                        <div class="d-flex">
+                                                            <span class="time p-1">{{$message->created_at->diffForHumans()}}</span>
+                                                            @php
+                                                                $status = '';
+                                                                switch ($message->status) {
+                                                                    case 0:
+                                                                        $status = "Que";
+                                                                        break;
+                                                                    case 1:
+                                                                        $status = "Send";
+                                                                        break;
+                                                                    case 2:
+                                                                        $status = "Read";
+                                                                        break;
+                                                                }
+                                                            @endphp
+                                                            <span class="status p-1">{{ $status }}</span>
+                                                        </div>
                                                     </li>
                                                     @endforeach
 

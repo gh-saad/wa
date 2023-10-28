@@ -54,9 +54,14 @@ class InboxController extends Controller
             "to" => $contact['number'],
             "content" => $request->get('body'),
         ];
-        if(Message::create($message_data)){
+        $message = Message::create($message_data);
+        if($message){
             if (App::environment('production')) {
-                $twilio->sendMessage($number['number'], $contant['number'], $request->get('body'));
+                $sid = $twilio->sendMessage($number['number'], $contant['number'], $body);
+                if($sid){
+                    $message->message_sid = $sid;
+                    $message->save();
+                }
             }
         }
         return redirect()->route('backend-inbox-show',$conversation->id);

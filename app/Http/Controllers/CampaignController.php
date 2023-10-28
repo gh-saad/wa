@@ -145,10 +145,15 @@ class CampaignController extends Controller
                 "to" => $contant['number'],
                 "content" => $body,
             ];
-            print_r($message_data);
-            if(Message::create($message_data)){
+            // print_r($message_data);
+            $message = Message::create($message_data);
+            if($message){
                 if (App::environment('production')) {
-                    $twilio->sendMessage($number['number'], $contant['number'], $body);
+                    $sid = $twilio->sendMessage($number['number'], $contant['number'], $body);
+                    if($sid){
+                        $message->message_sid = $sid;
+                        $message->save();
+                    }
                 }
             }
         }

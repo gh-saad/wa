@@ -56,30 +56,84 @@ class TwilioController extends Controller
 
     public function incoming(Request $request)
     {
-        $data = $request->all();
-        $from = str_replace("+","",$data['From']);
-        $to = str_replace("+","",$data['To']);
+        $from = str_replace("whatsapp:+","",$request->get('From'));
+        $to = str_replace("whatsapp:+","",$request->get('To'));
+        $wa_name = $request->get('ProfileName');
+        $wa_latitude = $request->get('Latitude');
+        $wa_longitude = $request->get('Longitude');
+        $message_sid = $request->get('SmsMessageSid');
+
         $contact = Contact::where('number', $from)->first();
         $number = Number::where('number', $to)->first();
+
         if($contact == null){
             $contact = Contact::create([
-                "list_id" => 0,
-                "name" => "Unknown",
+                "name" => null,
                 "number" => $from,
                 "status" => 0
             ]);
         }
-        $conversation = Conversation::firstOrCreate(['num_id'=> $number->id, 'contact_id' => $contact->id]);
+
+        $conversation = Conversation::where(['num_id'=> $number->id, 'contact_id' => $contact->id])->first();
+        if($conversation == null){
+            $conversation = Conversation::create([
+                'num_id'=> $number->id,
+                'contact_id' => $contact->id,
+                'status' => 1
+            ]);
+        }
 
         $input_data = [
             'conversation_id' => $conversation->id,
+            'message_sid'=>$message_sid,
             'from' => $from,
             'to' => $to,
-            'content' => $data['Body']
+            'content' => $request->get('Body'),
+            'latitude' => $wa_latitude,
+            'longitude' => $wa_longitude,
         ];
+
         Conversation::where('id', $conversation->id)
         ->update(['status' => 1]);
+
         Message::create($input_data);
-        return 1;
+
+        // Update wa profile name in contact
+        if($contact->wa_name == null){
+            $contact->wa_name = $wa_name;
+            $contact->save();
+        }
+
+        $res = '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>';
+        return response($res, 200)->header('Content-Type', 'text/xml, application/xml, text/html');
+    }
+
+    public function status(Request $request)
+    {
+        $from = str_replace("whatsapp:+","",$request->get('From'));
+        $to = str_replace("whatsapp:+","",$request->get('To'));
+        $message_sid = $request->get('MessageSid');
+        $status =   $request->get('SmsStatus');
+        if($status == 'sent'){
+            $status = 1;
+        }else if($status == 'received'){
+            $status = 1;
+        }else if($status == 'read'){
+            $status = 1;
+        }
+
+        $data = [
+            'from'=> $from,
+            'to' => $to,
+            'message_sid' => $message_sid
+        ];
+        $message = Message::where($data)->first();
+        if($message){
+            $message->status = $status;
+            $message->save();
+        }
+
+        $res = '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>';
+        return response($res, 200)->header('Content-Type', 'text/xml, application/xml, text/html');
     }
 }
