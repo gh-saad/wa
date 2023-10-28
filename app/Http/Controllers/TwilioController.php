@@ -105,7 +105,8 @@ class TwilioController extends Controller
         }
 
         $res = '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>';
-        return response($res, 200)->header('Content-Type', 'text/xml, application/xml, text/html');
+        // return response($res, 200)->header('Content-Type', 'text/xml, application/xml, text/html');
+        return respons("",200);
     }
 
     public function status(Request $request)
@@ -134,6 +135,6 @@ class TwilioController extends Controller
         }
 
         $res = '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>';
-        return response($res, 200)->header('Content-Type', 'text/xml, application/xml, text/html');
+        return response("", 200); //->header('Content-Type', 'text/xml, application/xml, text/html');
     }
 }
