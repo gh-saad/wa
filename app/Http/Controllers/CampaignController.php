@@ -107,7 +107,9 @@ class CampaignController extends Controller
         $twilio = new TwilioController();
 
         $listContacts = ListContact::select('list_contact.*', 'contacts.name', 'contacts.number')->join('contacts', 'list_contact.contact_id', '=','contacts.id')
-        ->where('list_id', $campaign->list_id)->get();
+        ->where('list_id', $campaign->list_id)
+        ->whereIn('contacts.status',[0,1])
+        ->get();
 
         $blacklist = Blacklist::select('number')->get();
         $blacklist = $blacklist->toArray();
