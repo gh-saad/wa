@@ -17,7 +17,16 @@
                     <img class="img-fluid" src="https://mehedihtml.com/chatbox/assets/img/user.png" alt="user img">
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    <h3>{{ $conversation->wa_name }}</h3>
+                    @php
+                        if($conversation->name != null || $conversation->name != ""){
+                            $name = $conversation->name;
+                        }elseif($conversation->wa_name != null || $conversation->wa_name != ""){
+                            $name = $conversation->wa_name;
+                        }else{
+                            $name = $conversation->number;
+                        }
+                    @endphp
+                    <h3>{{ $name }}</h3>
                     <p>CID#: {{ $conversation->id }} - {{ $conversation->updated_at->diffForHumans() }}</p>
                 </div>
             </a>

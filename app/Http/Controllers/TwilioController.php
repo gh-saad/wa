@@ -131,17 +131,20 @@ class TwilioController extends Controller
         $to = str_replace("whatsapp:+","",$request->get('To'));
         $message_sid = $request->get('MessageSid');
         $status =   $request->get('SmsStatus');
-        // queued , sent, delivered, read, failed
+
+        // queued , sent, delivered, read, failed, undelivered
         if($status == 'queued'){
             $status = 0;
         }else if($status == 'sent'){
             $status = 1;
-        }else if($status == 'delivered'){
+        }else if($status == 'delivered' && $status == 'received' ){
             $status = 2;
         }else if($status == 'read'){
             $status = 3;
-        }else{
+        }else if($status == 'failed'){
             $status = 4;
+        }else if($status == 'undelivered'){
+            $status = 5;
         }
 
         $data = [
@@ -151,8 +154,25 @@ class TwilioController extends Controller
         ];
         $message = Message::where($data)->first();
         if($message){
+            $conversation_id = $message->conversation_id;
             $message->status = $status;
             $message->save();
+
+            if($status == 4 || $status == 5){
+                $error_code = $request->get('ErrorCode');
+                $contact = Contact::where('number', $to)->first();
+                if($error_code == 63024){ // invalid
+                    $contact->status = 3;
+                    $contact->save();
+                }else if($error_code == 63032){ // unable
+                    $contact->status = 4;
+                    $contact->save();
+                }
+                $conversation = Conversation::find($conversation_id);
+                $conversation->status = 2; //block
+                $conversation->save();
+
+            }
         }
 
         $res = '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>';

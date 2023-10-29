@@ -18,7 +18,7 @@ class InboxController extends Controller
         $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
         ->join("contacts","conversations.contact_id", "=", "contacts.id")
         ->where('conversations.status', 1)
-        ->orderBy('updated_at')
+        ->orderByDesc('updated_at')
         ->get();
 
         return view("inbox.inbox",[
@@ -31,7 +31,7 @@ class InboxController extends Controller
         $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
         ->join("contacts","conversations.contact_id", "=", "contacts.id")
         ->where('conversations.status', 0)
-        ->orderBy('updated_at')
+        ->orderByDesc('updated_at')
         ->get();
 
         return view("inbox.inbox",[
@@ -45,7 +45,7 @@ class InboxController extends Controller
             $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
             ->join("contacts","conversations.contact_id", "=", "contacts.id")
             ->where('conversations.status', 1)
-            ->orderBy('updated_at')
+            ->orderByDesc('updated_at')
             ->get();
             $contact = Contact::find($conversation->contact_id);
 
@@ -67,7 +67,7 @@ class InboxController extends Controller
             $conversations = Conversation::select('conversations.*', 'contacts.name', 'contacts.number', 'contacts.wa_name')
             ->join("contacts","conversations.contact_id", "=", "contacts.id")
             ->where('conversations.status', 0)
-            ->orderBy('updated_at')
+            ->orderByDesc('updated_at')
             ->get();
             $contact = Contact::find($conversation->contact_id);
 
