@@ -127,6 +127,9 @@
                                                                     case 3:
                                                                         $status = "Read";
                                                                         break;
+                                                                    case 5:
+                                                                        $status = "Undelivered";
+                                                                        break;
                                                                     default:
                                                                         $status = "Failed";
                                                                 }
