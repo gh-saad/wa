@@ -72,7 +72,7 @@
                                                         </div>
                                                         <div class="flex-grow-1 ms-3">
                                                             <h3>{{ $contact->name }} - {{ $contact->wa_name }}</h3>
-                                                            <p>{{ $contact->number }}</p>
+                                                            <p>{{ $contact->number }} status: {{ $contact->status }}</p>
                                                         </div>
                                                     </div>
                                                 </div>
