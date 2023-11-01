@@ -74,6 +74,10 @@
                             <input type="text" class="form-control" id="name" name="name" required>
                         </div>
                         <div class="mb-3">
+                            <label for="name" class="form-label">Area:</label>
+                            <input type="text" class="form-control" id="area" name="area" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="template" class="form-label">Number:</label>
                             <select class="form-select" id="number" name="num_id" required>
                                 <option>Select a Template</option>

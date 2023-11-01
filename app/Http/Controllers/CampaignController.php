@@ -58,6 +58,7 @@ class CampaignController extends Controller
         // ]);
         $data = [
             'name' => $request->get('name'),
+            'area' => $request->get('area'),
             'num_id' => $request->get('num_id'),
             'template_id' => $request->get('template_id'),
             'list_id' => $request->get('list_id'),
@@ -141,6 +142,7 @@ class CampaignController extends Controller
             // echo 'Template: '.$template['body'].'<br>';
             // echo 'Conversation id: '.$conversation_id.'<br>';
             $body = str_replace('{{1}}',$contant['name'], $template['body']);
+            $body = str_replace('{{2}}',$campaign->area, $template['body']);
             $message_data = [
                 "conversation_id" => $conversation_id,
                 "from" => $number['number'],

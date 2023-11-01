@@ -18,7 +18,9 @@
                                     <th>Name</th>
                                     <th>Template</th>
                                     <th>List</th>
+                                    <th>Area</th>
                                     <th>Status</th>
+                                    <th>Schedule</th>
                                     <th>Last Modified</th>
                                     <th>Action</th>
                                 </tr>
@@ -29,7 +31,9 @@
                                         <td>{{ $campaign->name }}</td>
                                         <td>{{ $campaign->t_name }}</td>
                                         <td>{{ $campaign->l_name }}</td>
+                                        <td>{{ $campaign->area }}</td>
                                         <td>{{ ($campaign->status == 0) ? "Waiting" : "Completed" }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($campaign->schedule_time)->diffForHumans()}}</td>
                                         <td>{{ $campaign->updated_at->diffForHumans()}}</td>
                                         <td>
                                             @if ($campaign->status == 0)
