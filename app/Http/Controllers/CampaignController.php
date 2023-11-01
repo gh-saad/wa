@@ -34,7 +34,7 @@ class CampaignController extends Controller
      */
     public function create()
     {
-        $templates = Template::all();
+        $templates = Template::where('status', 1)->get();
         $numbers = Number::all();
         $lists = Lists::where('total_contacts', '>', 0)->get();
         return view("campaigns.create",[
@@ -142,7 +142,7 @@ class CampaignController extends Controller
             // echo 'Template: '.$template['body'].'<br>';
             // echo 'Conversation id: '.$conversation_id.'<br>';
             $body = str_replace('{{1}}',$contant['name'], $template['body']);
-            $body = str_replace('{{2}}',$campaign->area, $template['body']);
+            $body = str_replace('{{2}}',$campaign->area, $body);
             $message_data = [
                 "conversation_id" => $conversation_id,
                 "from" => $number['number'],
