@@ -10,7 +10,7 @@ use App\Models\Contact;
 class ContactController extends Controller
 {
     public function contacts() {
-        $data = Contact::where('status', '!=', '2')->get();
+        $data = Contact::where('status', '!=', '2')->orderByDesc('id')->get();
         return view("contacts.contacts", ['data' => $data]);
     }
 }

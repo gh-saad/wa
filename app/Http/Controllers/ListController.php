@@ -16,7 +16,7 @@ class ListController extends Controller
      */
     public function index()
     {
-        $data = Lists::all();
+        $data = Lists::orderByDesc('id')->get();
         return view("lists.lists",["data" => $data]);
     }
 
