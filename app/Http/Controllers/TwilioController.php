@@ -137,7 +137,7 @@ class TwilioController extends Controller
             $status = 0;
         }else if($status == 'sent'){
             $status = 1;
-        }else if($status == 'delivered' && $status == 'received' ){
+        }else if($status == 'delivered' || $status == 'received' ){
             $status = 2;
         }else if($status == 'read'){
             $status = 3;

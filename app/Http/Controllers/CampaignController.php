@@ -25,6 +25,7 @@ class CampaignController extends Controller
         $data = Campaign::select('campaigns.*','templates.name as t_name', 'lists.name as l_name')
         ->join('templates', 'campaigns.template_id', '=', 'templates.id')
         ->join("lists","campaigns.list_id", "=", "lists.id")
+        ->orderByDesc('id')
         ->get();
         return view("campaigns.campaigns",["data" => $data]);
     }
