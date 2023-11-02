@@ -9,6 +9,8 @@ use App\Models\Conversation;
 use App\Models\Contact;
 use App\Models\Number;
 use App\Models\Blacklist;
+use Illuminate\Support\Facades\DB;
+
 class TwilioController extends Controller
 {
     /*
@@ -177,5 +179,24 @@ class TwilioController extends Controller
 
         $res = '<?xml version="1.0" encoding="UTF-8" ?><Response></Response>';
         return response("", 200); //->header('Content-Type', 'text/xml, application/xml, text/html');
+    }
+
+    public function msg(Request $request)
+    {
+        $from = $request->get('From');
+        $to = $request->get('To');
+        $message_sid = $request->get('SmsMessageSid');
+        $body = $request->get('Body');
+
+        $input_data = [
+            'message_sid'=>$message_sid,
+            'to' => $to,
+            'content' => $body,
+        ];
+
+        // Check Blacklist word and make conversation
+        DB::table('msg')->insert($input_data);
+
+        return response("",200);
     }
 }

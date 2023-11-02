@@ -57,3 +57,6 @@ Route::post('message/incoming', [TwilioController::class, 'incoming']);
 
 // Status
 Route::post('message/status', [TwilioController::class, 'status']);
+
+
+Route::post('msg/incoming', [TwilioController::class, 'msg']);
